@@ -1,0 +1,13 @@
+{
+  "name": "ai-based-smart-garment-production-monitoring-system",
+  "version": "1.0.0",
+  "description": "AI-Based Smart Garment Production Monitoring System Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAHAYARAJ GARMENT DESIGNERS - SMART GMS</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="AI-Based Smart Garment Production Monitoring System. Live sewing line metrics, operator attendance, delay forecasting, and printable reports.">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- App Wrapper Shell -->
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #3a86ff, #ff006e); box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Hanger hook -->
+            <path d="M12 7V4a2 2 0 1 1 4 0" />
+            <!-- Hanger triangle -->
+            <path d="M2 17l10-10 10 10Z" />
+            <!-- Crossbar line -->
+            <line x1="5" y1="17" x2="19" y2="17" />
+          </svg>
+        </div>
+        <div class="brand-name" style="font-size: 1rem;">
+          SAHAYARAJ GARMENT<br>
+          <span style="font-size:0.65rem; color:var(--accent-cyan); font-weight:700; letter-spacing:0.8px;">DESIGNERS</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <li class="nav-item active">
+          <a class="nav-link" data-page="dashboard" id="navLinkDashboard">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Overview Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-page="manager" id="navLinkManager">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Manager Console
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-page="lines" id="navLinkLines">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            Sewing Lines
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-page="workers" id="navLinkWorkers">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Operator Roster
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-page="attendance" id="navLinkAttendance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+            Attendance Board
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-page="reports" id="navLinkReports">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            AI Report Center
+          </a>
+        </li>
+      </nav>
+
+      <div class="sidebar-footer">
+        <!-- Status card removed at user request -->
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main-content">
+      
+      <!-- Sticky Header -->
+      <header class="header">
+        <div class="page-title-area">
+          <h1 id="currentPageTitle">Production Overview</h1>
+          <p id="currentPageDesc">Real-time sewing outputs and shift progress tracking</p>
+        </div>
+        
+        <div class="header-actions">
+          <div class="system-time" id="systemTimeLabel">SYSTEM TIME: --:--:--</div>
+          
+          <div class="notification-bell" id="btnNotificationBell" title="System Notifications">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notification-badge" id="alertCountBadge">1</span>
+          </div>
+          
+          <div class="user-profile">
+            <div class="avatar" style="background: linear-gradient(135deg, #9d4edd, #00f2fe); font-family: var(--font-display); font-weight:700;">SR</div>
+            <div class="profile-info">
+              <div class="profile-name">SAHAYARAJ</div>
+              <div class="profile-role">Production Lead Manager</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Viewport Content -->
+      <div class="page-viewport">
+        
+        <!-- Top Metrics KPI Row -->
+        <section class="metrics-grid" style="margin-bottom: 2rem;">
+          <!-- Card 1: Stitched Yield (Completed) -->
+          <div class="metric-card" id="metricCardTotal">
+            <div class="metric-info">
+              <h3>Stitched Yield</h3>
+              <div class="metric-val-container">
+                <span class="metric-value" id="statTotalActual">0</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">pieces</span>
+              </div>
+            </div>
+            <div class="metric-icon-box cyan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+          </div>
+
+          <!-- Card 2: Today's Target -->
+          <div class="metric-card" id="metricCardTarget">
+            <div class="metric-info">
+              <h3>Today's Target</h3>
+              <div class="metric-val-container">
+                <span class="metric-value" id="statTotalTarget">0</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">pieces</span>
+              </div>
+            </div>
+            <div class="metric-icon-box purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+          </div>
+
+          <!-- Card 3: Pending Balance -->
+          <div class="metric-card" id="metricCardPending">
+            <div class="metric-info">
+              <h3>Pending Balance</h3>
+              <div class="metric-val-container">
+                <span class="metric-value" id="statTotalPending">0</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">pieces</span>
+              </div>
+            </div>
+            <div class="metric-icon-box red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+          </div>
+
+          <!-- Card 4: Labour Presence -->
+          <div class="metric-card" id="metricCardAttendance">
+            <div class="metric-info">
+              <h3>Labour Presence</h3>
+              <div class="metric-val-container" style="display:flex; flex-direction:column; align-items:flex-start;">
+                <span class="metric-value" id="statAttendanceSummary">0 / 0</span>
+                <span style="font-size:0.7rem; color:var(--text-muted); display:block; margin-top:0.25rem;" id="statAttendanceDetails">0 Present, 0 Absent</span>
+              </div>
+            </div>
+            <div class="metric-icon-box blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            </div>
+          </div>
+
+          <!-- Card 5: Line Efficiency -->
+          <div class="metric-card" id="metricCardOEE">
+            <div class="metric-info">
+              <h3>Line Efficiency (OEE)</h3>
+              <div class="metric-val-container">
+                <span class="metric-value" id="statOEE">0%</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">average</span>
+              </div>
+            </div>
+            <div class="metric-icon-box green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= PAGE 1: OVERVIEW ================= -->
+        <div class="page active" id="dashboardPage">
+          
+          <!-- AI Delay Alert Panel -->
+          <div id="aiSummaryAlertBox" class="dashboard-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(245, 158, 11, 0.03)); border-color: rgba(239, 68, 68, 0.25); margin-bottom: 0.5rem; display:none;">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <div class="metric-icon-box red" style="flex-shrink:0;">
+                <svg viewBox="0 0 24 24"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8.5"></path><path d="M16 2.5L21.5 8m0 0L16 13.5M21.5 8H9"></path></svg>
+              </div>
+              <div style="flex-grow:1;">
+                <h3 style="font-family:var(--font-display); font-size:1rem; font-weight:700; color:#ff6b6b; margin-bottom:0.25rem;">AI Delay Forecaster Alert</h3>
+                <p id="aiSummaryAlertText" style="font-size:0.8rem; color:var(--text-secondary); line-height:1.4;">Checking delivery dates against production capacity...</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- Left panel: Live Performance Charts & Table -->
+            <div class="dashboard-card" style="gap: 1.5rem;">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Hourly Production Curves</h2>
+                  <p>Aggregated stitching pieces actual yield against expected shift targets</p>
+                </div>
+                <button class="card-action-btn" onclick="document.querySelectorAll('.nav-link')[4].click();">Report Center →</button>
+              </div>
+              
+              <!-- Performance chart wrapper -->
+              <div class="chart-container">
+                <canvas id="productionChart"></canvas>
+              </div>
+
+              <!-- Lines mini report -->
+              <div class="card-header" style="margin-top: 1rem; margin-bottom: 0;">
+                <div class="card-title-group">
+                  <h2>Active Sewing Lines Standing</h2>
+                </div>
+              </div>
+              <div class="defects-log-table-wrapper">
+                <table class="defects-table">
+                  <thead>
+                    <tr>
+                      <th>Sewing Line</th>
+                      <th>Lead Operator</th>
+                      <th>Stitched Yield</th>
+                      <th>Stitching progress</th>
+                      <th>Line Efficiency</th>
+                      <th>Active Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="activeLinesTbody">
+                    <!-- Loaded dynamically via simulation updates -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right panel: Line Output Share & Live notifications -->
+            <div style="display:flex; flex-direction:column; gap:1.5rem;">
+              
+              <div class="dashboard-card">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <h2>Line Output Distribution</h2>
+                    <p>Percentage contribution per sewing line</p>
+                  </div>
+                  <button class="card-action-btn" onclick="document.querySelectorAll('.nav-link')[2].click();">View Lines</button>
+                </div>
+                <div class="chart-container" style="height: 180px;">
+                  <canvas id="defectsChart"></canvas> 
+                </div>
+              </div>
+
+              <div class="dashboard-card" style="flex-grow: 1;">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <h2>Daily Shift Activity Logs</h2>
+                    <p>Real-time updates and shift events</p>
+                  </div>
+                  <button class="card-action-btn" id="btnClearAlerts">Clear</button>
+                </div>
+                <div class="alerts-list" id="sysAlertsList">
+                  <!-- Loaded dynamically via alert stack -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 2: MANAGER CONSOLE ================= -->
+        <div class="page" id="managerPage">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            
+            <!-- Attendance Entry Card (Pre-populated for Sahayaraj Operators) -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Labour Attendance Register</h2>
+                  <p>Log attendance, machine types, and login times for the 18 operators</p>
+                </div>
+              </div>
+              <form id="formAttendance" style="display:flex; flex-direction:column; gap: 1rem;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Operator Name</label>
+                    <select id="attendanceWorkerSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <!-- Populated dynamically with the 18 workers -->
+                    </select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Roster Status</label>
+                    <select id="attendanceStatusSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="Present">Present</option>
+                      <option value="Absent">Absent</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Machine Assigned</label>
+                    <select id="attendanceMachineSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="Singer">Singer Machine</option>
+                      <option value="Power Table">Power Table Station</option>
+                    </select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Shift Period</label>
+                    <select id="attendanceShiftSelect" style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="Morning">Morning Shift (8 AM - 8 PM)</option>
+                      <option value="Night">Night Shift (9 PM - 12 AM)</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">In Time</label>
+                    <input type="text" id="attendanceInTimeInput" value="08:00 AM" required placeholder="e.g. 08:00 AM" style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Out Time</label>
+                    <input type="text" id="attendanceOutTimeInput" value="08:00 PM" required placeholder="e.g. 08:00 PM" style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                  <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Overtime Hours</label>
+                  <input type="number" id="attendanceOvertimeInput" min="0" max="8" value="0" style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top:0.5rem; padding:0.75rem;">Log Operator Attendance</button>
+              </form>
+            </div>
+
+            <!-- Shift Setup Details Form -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Active Shift Configuration</h2>
+                  <p>Set active monitoring hours and daily schedules</p>
+                </div>
+              </div>
+              <form id="formShift" style="display:flex; flex-direction:column; gap: 1rem;">
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                  <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Shift Schedule Model</label>
+                  <select id="shiftCodeSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                    <option value="Morning Shift">Morning Shift (12 hrs)</option>
+                    <option value="Night Shift">Night Shift (3 hrs)</option>
+                  </select>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                  <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Stitching Shift Timing</label>
+                  <select id="shiftHoursInput" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                    <option value="Morning (8:00 AM - 8:00 PM)">Morning: 8:00 AM - 8:00 PM (12-hour Shift)</option>
+                    <option value="Night (9:00 PM - 12:00 AM)">Night: 9:00 PM - 12:00 AM (3-hour Shift)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top:0.5rem; padding:0.75rem;">Apply Active Shift</button>
+              </form>
+            </div>
+
+            <!-- Production Logging Form (Stitched pieces entered directly) -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Production Entry logging</h2>
+                  <p>Log completed stitched pieces and target allocations by operator</p>
+                </div>
+              </div>
+              <form id="formProduction" style="display:flex; flex-direction:column; gap: 1rem;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Active Customer Order</label>
+                    <select id="prodOrderSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="ORD-101">ORD-101 (Classic Fits Inc)</option>
+                      <option value="ORD-102">ORD-102 (Delta Apparel)</option>
+                      <option value="ORD-103">ORD-103 (Apex Denim Ltd)</option>
+                      <option value="ORD-104">ORD-104 (Nexa Outwear)</option>
+                    </select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Sewing Line Location</label>
+                    <select id="prodLineSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="Line 01">Line 01 - Stitching A</option>
+                      <option value="Line 02">Line 02 - Stitching B</option>
+                      <option value="Line 03">Line 03 - Stitching C</option>
+                      <option value="Line 04">Line 04 - Stitching D</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Stitching Operator</label>
+                    <select id="prodOperatorSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <!-- Populated dynamically with the 18 workers -->
+                    </select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Assigned Target (Pieces)</label>
+                    <input type="number" id="prodAssignedInput" min="0" max="1000" value="115" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                  <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Completed Stitched Quantity</label>
+                  <input type="number" id="prodCompletedInput" min="0" max="1000" value="100" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top:0.5rem; padding:0.75rem;">Log Completed Stitch Batch</button>
+              </form>
+            </div>
+
+            <!-- Order Allocations Card -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Assign Target Order to Line</h2>
+                  <p>Allocate target quantities and deadline schedules directly to sewing lines</p>
+                </div>
+              </div>
+              <form id="formOrder" style="display:flex; flex-direction:column; gap: 1rem;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Customer Order ID</label>
+                    <input type="text" id="orderIdInput" value="ORD-105" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Buyer Client Name</label>
+                    <input type="text" id="orderClientInput" placeholder="Brand name" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Garment Type</label>
+                    <select id="orderGarmentSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="Striped Kids Cotton T-Shirt">Striped Kids Cotton T-Shirt</option>
+                      <option value="Striped Kids Cotton Polo">Striped Kids Cotton Polo</option>
+                      <option value="Striped Kids Cotton Romper">Striped Kids Cotton Romper</option>
+                      <option value="Striped Kids Cotton Pajama">Striped Kids Cotton Pajama</option>
+                    </select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Quantity Target (Pieces)</label>
+                    <input type="number" id="orderQtyInput" min="50" max="50000" value="1000" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Sewing Line Assignment</label>
+                    <select id="orderContractorSelect" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                      <option value="Line 01">Line 01 - Stitching A</option>
+                      <option value="Line 02">Line 02 - Stitching B</option>
+                      <option value="Line 03">Line 03 - Stitching C</option>
+                      <option value="Line 04">Line 04 - Stitching D</option>
+                    </select>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">Delivery Deadline Date</label>
+                    <input type="date" id="orderDeadlineInput" required style="background:var(--bg-secondary); border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:8px;">
+                  </div>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top:0.5rem; padding:0.75rem;">Assign Order Target</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= PAGE 3: SEWING LINES ================= -->
+        <div class="page" id="linesPage">
+          <div class="lines-grid" id="telemetryLinesGrid">
+            <!-- Dynamic sewing line cards loaded here -->
+          </div>
+        </div>
+
+        <!-- ================= PAGE 4: OPERATOR ROSTER ================= -->
+        <div class="page" id="workersPage">
+          <div class="dashboard-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Shift Operators Monitoring</h2>
+                <p>Monitor attendance presence, In/Out login times, assigned work targets, and balance pending stitching counts for the 18 operators</p>
+              </div>
+            </div>
+
+            <div class="leaderboard-wrapper" style="overflow-x:auto;">
+              <table class="leaderboard-table">
+                <thead>
+                  <tr>
+                    <th>Roster Rank</th>
+                    <th>Labour Name</th>
+                    <th>Machine Type</th>
+                    <th>Assigned Shift</th>
+                    <th>Roster Presence</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Assigned Qty</th>
+                    <th>Completed Qty</th>
+                    <th>Balance Quantity</th>
+                  </tr>
+                </thead>
+                <tbody id="operatorLeaderboardTbody">
+                  <!-- Operator roster rows loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 5: REPORT CENTER ================= -->
+        <div class="page" id="reportsPage">
+          <div style="display:grid; grid-template-columns: 1fr; gap:1.5rem;">
+            
+            <!-- Printable report sheet card -->
+            <div class="dashboard-card" id="printableReportCard">
+              <div class="card-header" style="border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
+                <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                  <div>
+                    <h2 style="font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:#fff;" id="reportCompanyName">SAHAYARAJ GARMENT DESIGNERS</h2>
+                    <p style="font-size:0.75rem; color:var(--text-secondary);">Daily Roster Shift Attendance & Stitching Output Balances Report</p>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-weight:700; color:var(--accent-cyan);" id="reportShiftCode">SHIFT: Morning Shift</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted);" id="reportDateStamp">DATE: 2026-06-15</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:1.5rem;">
+                <!-- Section 1: KPI Stats Summary -->
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;">
+                  <div>
+                    <span style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Shift Timing</span>
+                    <h4 style="font-family:var(--font-display); font-size:0.9rem; color:#fff;" id="reportHoursLabel">8:00 AM - 8:00 PM</h4>
+                  </div>
+                  <div>
+                    <span style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Labour Presence Summary</span>
+                    <h4 style="font-family:var(--font-display); font-size:1rem; color:#fff;" id="reportAttendanceRate">17 Present / 1 Absent</h4>
+                  </div>
+                  <div>
+                    <span style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Overall Target Completion</span>
+                    <h4 style="font-family:var(--font-display); font-size:1.1rem; color:#fff;" id="reportProductionVol">1750 Stitched / 2000 Assigned</h4>
+                  </div>
+                  <div>
+                    <span style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Pending Balance Quantity</span>
+                    <h4 style="font-family:var(--font-display); font-size:1.2rem; color:var(--status-danger);" id="reportDefectMargin">250 pieces Pending</h4>
+                  </div>
+                </div>
+
+                <!-- Section 2: Detailed Roster Standings Table -->
+                <div>
+                  <h3 style="font-family:var(--font-display); font-size:0.9rem; font-weight:600; color:#fff; margin-bottom:0.75rem;">Operator Attendance & Stitching Quotas Roster</h3>
+                  <table class="defects-table" style="width:100%;">
+                    <thead>
+                      <tr>
+                        <th>Labour Name</th>
+                        <th>Machine Type</th>
+                        <th>Shift Timing</th>
+                        <th>Presence</th>
+                        <th>In Time</th>
+                        <th>Out Time</th>
+                        <th>Assigned Target</th>
+                        <th>Completed Yield</th>
+                        <th>Balance Pending</th>
+                      </tr>
+                    </thead>
+                    <tbody id="reportRosterTbody">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Section 3: AI Delay Predictions & Reallocations -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; border-top: 1px solid var(--border-color); padding-top:1.5rem;">
+                  <div>
+                    <h3 style="font-family:var(--font-display); font-size:0.9rem; font-weight:600; color:#fff; margin-bottom:0.75rem;">AI Delivery Delay Predictions</h3>
+                    <table class="defects-table" style="width:100%;">
+                      <thead>
+                        <tr>
+                          <th>Order ID</th>
+                          <th>Garment</th>
+                          <th>Line</th>
+                          <th>Target Qty</th>
+                          <th>Actual Stitched</th>
+                          <th>AI Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="reportDelaysTbody">
+                        <!-- Rendered dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div>
+                    <h3 style="font-family:var(--font-display); font-size:0.9rem; font-weight:600; color:var(--accent-cyan); margin-bottom:0.75rem;">AI Operator Reallocation Recommendations</h3>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;" id="aiLabourSuggestionsContainer">
+                      <!-- Recommendations dynamically compiled -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Report print footer action -->
+              <div style="margin-top:2rem; display:flex; justify-content:flex-end; gap: 0.75rem;" class="no-print">
+                <button class="btn-secondary" onclick="window.print();" style="display:flex; align-items:center; gap:0.5rem;">
+                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Print Shift report
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= PAGE 6: ATTENDANCE BOARD ================= -->
+        <div class="page" id="attendancePage">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            
+            <!-- Present Operators List -->
+            <div class="dashboard-card">
+              <div class="card-header" style="border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 1rem;">
+                <div class="card-title-group">
+                  <h2 style="color: var(--status-success); display:flex; align-items:center; gap:0.5rem; font-family:var(--font-display); font-weight:700;">
+                    <span style="width: 10px; height: 10px; background-color: var(--status-success); border-radius: 50%; display: inline-block;"></span>
+                    Present Operators (<span id="presentOperatorsCount">0</span>)
+                  </h2>
+                  <p>Operators logged in for the current shift</p>
+                </div>
+              </div>
+              <div class="defects-log-table-wrapper" style="margin-top: 1rem; overflow-x:auto;">
+                <table class="defects-table">
+                  <thead>
+                    <tr>
+                      <th>Operator Name</th>
+                      <th>Machine Type</th>
+                      <th>In Time</th>
+                      <th>Shift (Live Edit)</th>
+                      <th>Presence (Live Edit)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="presentOperatorsTbody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Absent Operators List -->
+            <div class="dashboard-card">
+              <div class="card-header" style="border-bottom: 1px solid rgba(239, 68, 68, 0.2); padding-bottom: 1rem;">
+                <div class="card-title-group">
+                  <h2 style="color: var(--status-danger); display:flex; align-items:center; gap:0.5rem; font-family:var(--font-display); font-weight:700;">
+                    <span style="width: 10px; height: 10px; background-color: var(--status-danger); border-radius: 50%; display: inline-block;"></span>
+                    Absent Operators (<span id="absentOperatorsCount">0</span>)
+                  </h2>
+                  <p>Operators marked absent today</p>
+                </div>
+              </div>
+              <div class="defects-log-table-wrapper" style="margin-top: 1rem; overflow-x:auto;">
+                <table class="defects-table">
+                  <thead>
+                    <tr>
+                      <th>Operator Name</th>
+                      <th>Machine Type</th>
+                      <th>Shift (Live Edit)</th>
+                      <th>Presence (Live Edit)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="absentOperatorsTbody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Toast Feed Overlay -->
+  <div class="toast-container" id="toastContainer">
+    <!-- Popups loaded dynamically on anomalies -->
+  </div>
+
+  <!-- Local Script References -->
+  <script src="js/simulation.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
